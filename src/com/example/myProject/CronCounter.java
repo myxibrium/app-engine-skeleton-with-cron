@@ -18,10 +18,13 @@ public class CronCounter {
 	}
 
 	void increaseCount(int currentCount) {
-		cronCounter.setProperty("count", currentCount++);
+		int newCount = (int) cronCounter.getProperty("count") + 1;
+		cronCounter.setProperty("count", newCount);
 	}
 
-	void getCurrentCount() {
-		cronCounter.getProperty("count");
+	int getCurrentCount() {
+
+		int current = (int) cronCounter.getProperty("count");
+		return current;
 	}
 }

@@ -10,10 +10,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class CronTest extends HttpServlet {
+public class CronJob extends HttpServlet {
 
 	private static final long serialVersionUID = -1036441233637180740L;
-	Logger logger = Logger.getLogger(CronTest.class.getName());
+	Logger logger = Logger.getLogger(CronJob.class.getName());
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
