@@ -18,8 +18,8 @@ public class CronTest extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-		Counter counter = new Counter();
-		counter.increaseCountBy1();
+		CronCounter counter = new CronCounter();
+		counter.setTime();
 		Date date = Calendar.getInstance().getTime();
 		resp.getWriter().println(date);
 		logger.info("hitting cron job, current time is " + date.toString());
