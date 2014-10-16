@@ -19,7 +19,7 @@ public class CronJob extends HttpServlet {
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		CronCounter counter = new CronCounter();
-		counter.setTime();
+		counter.setTimeAndCount();
 		Date date = Calendar.getInstance().getTime();
 		resp.getWriter().println(date);
 		logger.info("hitting cron job, current time is " + date.toString());
