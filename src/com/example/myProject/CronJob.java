@@ -10,6 +10,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.appengine.api.datastore.EntityNotFoundException;
+
 public class CronJob extends HttpServlet {
 
 	private static final long serialVersionUID = -1036441233637180740L;
@@ -19,7 +21,11 @@ public class CronJob extends HttpServlet {
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		CronCounter counter = new CronCounter();
-		counter.setTimeAndCount();
+		try {
+			counter.setTimeAndCount();
+		} catch (EntityNotFoundException e) {
+			logger.info("entity not found, exception: " + e);
+		}
 		Date date = Calendar.getInstance().getTime();
 		resp.getWriter().println(date);
 		logger.info("hitting cron job, current time is " + date.toString());
