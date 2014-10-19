@@ -1,8 +1,6 @@
 package com.example.myProject;
 
 import java.io.IOException;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.logging.Logger;
 
 import javax.servlet.ServletException;
@@ -10,7 +8,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.google.appengine.api.datastore.EntityNotFoundException;
+import com.google.appengine.api.datastore.Entity;
 
 public class CronJob extends HttpServlet {
 
@@ -20,15 +18,9 @@ public class CronJob extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-		CronCounter counter = new CronCounter();
-		try {
-			counter.setTimeAndCount();
-		} catch (EntityNotFoundException e) {
-			logger.info("entity not found, exception: " + e);
-		}
-		Date date = Calendar.getInstance().getTime();
-		resp.getWriter().println(date);
-		logger.info("hitting cron job, current time is " + date.toString());
+		CronCounter counterDao = new CronCounter();
+		Entity counter = counterDao.setTimeAndCount();
+		logger.info("cron job. Count is: " + counter.getProperty("count"));
 	}
 
 }

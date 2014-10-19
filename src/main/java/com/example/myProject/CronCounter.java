@@ -14,18 +14,39 @@ import com.google.appengine.api.datastore.KeyFactory;
 public class CronCounter {
 	Logger logger = Logger.getLogger(CronCounter.class.getName());
 
-	void setTimeAndCount() throws EntityNotFoundException {
-		DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
-		Key key = KeyFactory.createKey("cronCounter", Integer.parseInt("123"));
-		Entity cronCounter = ds.get(key);
-
+	public Entity setTimeAndCount() {
+		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+		Key key = KeyFactory.createKey("TransactionCounter", "chronSample");
+		
+		Entity cronCounter = getOrNull(datastore, key);
+		if (cronCounter == null) {
+			cronCounter = new Entity(key);
+		}
+		
 		Date currentTime = Calendar.getInstance().getTime();
 		cronCounter.setProperty("updatedTime", currentTime);
-		Long current = (Long) cronCounter.getProperty("count");
-		cronCounter.setProperty("count", current++);
-		ds.put(cronCounter);
+		Long current = longOrZero(cronCounter.getProperty("count"));
+		cronCounter.setProperty("count", current+1);
+		
+		datastore.put(cronCounter);
+
 		logger.info("cronCounter time: "
 				+ cronCounter.getProperty("updatedTime"));
 		logger.info("cronCounter count: " + cronCounter.getProperty("count"));
+		return cronCounter;
+	}
+	
+	private  <T> Long longOrZero(T value) {
+		return (Long) (value == null ? new Long(0) : value);
+	}
+	
+	private Entity getOrNull(DatastoreService ds, Key k) {
+		Entity entity;
+		try {
+			entity = ds.get(k);
+		} catch(EntityNotFoundException e) {
+			entity = null;
+		}
+		return entity;
 	}
 }
